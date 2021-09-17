@@ -7,14 +7,20 @@ theta = 0 : 179;
 len_theta = length(theta);
 d = 1;
 
+figure;
+
 P = radon(I, theta);
+subplot(121), imagesc(P), colormap(gray), title('I sinogram');
+
 [mm, nn] = size(P);
 e = floor((mm - N - 1) / 2 + 1) + 1;
 P = P(e : N + e - 1, :); % 截取中心N点投影数据
-P1 = reshape(P, N, len_theta);
+subplot(122), imagesc(P), colormap(gray), title('Clipped I sinogram');
 
-recon_RL = recon(len_theta, N, P1, delta, RLFilter(N, d));
-recon_SL = recon(len_theta, N, P1, delta, SLFilter(N, d));
+% fakeN = 368;
+recon_RL = recon(len_theta, N, P, delta, RLFilter(N, d));
+recon_SL = recon(len_theta, N, P, delta, SLFilter(N, d));
+
 figure;
 subplot(131), imshow(I, []), title('256 Shepp-Logan');
 subplot(132), imshow(recon_RL, []), title('recon RL');
